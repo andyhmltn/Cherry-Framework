@@ -1,0 +1,7 @@
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{SCRIPT_FILENAME} !-d  
+RewriteCond %{SCRIPT_FILENAME} !-f
+
+#http://www.example.com/random.php => http://www.example.com/random
+RewriteRule ^([^/.]+) $1.php
