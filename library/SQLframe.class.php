@@ -190,6 +190,9 @@ class SQLFrame {
 		 * them out. 
 		 */
 
+		if(empty($_results)) {
+			return FALSE;
+		}
 		if(!isset($_results[0])) {			#If it's a single result returned.
 			$_results = array();			#Create a new array.
 			$_results[0] = $results;		#Set the first value to the object returned.
@@ -215,6 +218,17 @@ class SQLFrame {
 		return count((array) $result) > 0;
 	}
 	
+
+	/**
+	 * Finds a random value
+	 *
+	 * @package findRandom()
+	 * 
+	 **/
+
+	function findRandom() {
+		return $this->first(array('order' => 'RAND()'));
+	}
 	/**
 	 * Used for finding values.
 	 * $Post->find(1) //Returns the post with the id 1
@@ -228,10 +242,16 @@ class SQLFrame {
 	
 	
 	function find() {
+		echo 'test';
 		$_args = func_get_args();
 		if(func_num_args() == 1 && preg_match('/^[0-9]*$/', $_args[0])) {
 			$query = "SELECT * FROM $this->_table WHERE id = '$_args[0]'";
-			return $this->query($query, TRUE);
+			$result = $this->query($query, TRUE);
+			if(count((array) $result) > 0) {
+				return $this->query($query, TRUE);
+			} else {
+				return FALSE;	
+			}
 		}
 		
 		$conditions = array();
@@ -258,14 +278,19 @@ class SQLFrame {
 			}
 			$i++;
 		}
+
 		
 		$query .= $temp;
 		if(!isset($argsExist)) {
 			$args = array();
 		}
 		$query = $this->sortArgsAndAppend($args, $query);
-
-		return $this->query($query, $single);
+		$result = $this->query($query, $single);
+		if(count((array) $result) > 0) {
+			return $this->query($query, $single);
+		} else {
+			return FALSE;	
+		}
 	}
 	
 	/**
@@ -507,12 +532,12 @@ class SQLFrame {
 		 * I added some functions to make certain actions
 		 * easier (creating a relationship, deleting one and
 		 * seeing if one exists.)
-		 */
+		 **/
 
 		 /**
 		  * This sorts the two table names alphabetically
 		  * and then returns the correct table name.
-		  */
+		  **/
 
 		function HABTtableName($relationTableName) {
 			$toSort = array($this->_table, $relationTableName);
@@ -601,6 +626,10 @@ class SQLFrame {
 			 * or multiple ones, you can use foreach to echo
 			 * them out. 
 			 */
+
+			if(empty($_results)) {
+				return FALSE;
+			}
 
 			if(!isset($_results[0])) {			#If it's a single result returned.
 				$_results = array();			#Create a new array.
