@@ -162,11 +162,12 @@ function route($url) {
 function readURL() {
 	global $url;
 
-	if($url !== NULL) {
+	if($url !== '') {
 		$url = route($url);
 		$urlArray = explode("/",$url);
 	}
-	
+
+
 	if(isset($urlArray)) {
 		$controller = escapeString($urlArray[0]);
 		array_shift($urlArray);
@@ -281,6 +282,8 @@ function setApacheSettings() {
  **/
 
 function __autoload($class) {
+
+	global $log;
 
 	if (file_exists(ROOT . DS . 'library' . DS . strtolower($class) . '.class.php')) {
 		require_once(ROOT . DS . 'library' . DS . strtolower($class) . '.class.php');
