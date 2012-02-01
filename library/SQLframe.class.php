@@ -242,7 +242,6 @@ class SQLFrame {
 	
 	
 	function find() {
-		echo 'test';
 		$_args = func_get_args();
 		if(func_num_args() == 1 && preg_match('/^[0-9]*$/', $_args[0])) {
 			$query = "SELECT * FROM $this->_table WHERE id = '$_args[0]'";
